@@ -62,6 +62,7 @@ class ObsClient
     {
         $signature = new Signature($this->secretKey);
         $canonicalResource = '/' . $this->bucket . '/' . trim($object, '/');
+        $expiresString = (string) $expires;
 
         $query = [
             'AccessKeyId' => $this->accessKey,
@@ -70,7 +71,7 @@ class ObsClient
                 method: 'GET',
                 contentMd5: '',
                 contentType: '',
-                expires: $expires,
+                expires: $expiresString,
                 canonicalizedHeaders: [],
                 canonicalizedResource: $canonicalResource
             ),
