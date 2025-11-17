@@ -1,0 +1,21 @@
+{
+  "name": "kalax2/huaweicloud-obs-client",
+  "description": "HuaweiCloud OBS Client for PHP",
+  "require": {
+    "php": ">=8.0",
+    "guzzlehttp/guzzle": "^7.0",
+    "spatie/array-to-xml": "^3.3",
+    "ext-simplexml": "*"
+  },
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Kalax2\\Obs\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "kalax2"
+    }
+  ]
+}
