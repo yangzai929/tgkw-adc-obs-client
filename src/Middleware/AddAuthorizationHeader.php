@@ -1,14 +1,21 @@
 <?php
 
-namespace Kalax2\Obs\Middleware;
+declare(strict_types=1);
+/**
+ * This file is part of tgkw-adc.
+ *
+ * @link     https://www.tgkw.com
+ * @document https://hyperf.wiki
+ */
+
+namespace TgkwAdc\Obs\Middleware;
 
 use Psr\Http\Message\RequestInterface;
-
-use Kalax2\Obs\Signature;
+use TgkwAdc\Obs\Signature;
 
 class AddAuthorizationHeader
 {
-    const ALLOWED_RESOURCE_PARAMETER_NAMES = [
+    public const ALLOWED_RESOURCE_PARAMETER_NAMES = [
         'CDNNotifyConfiguration',
         'acl',
         'append',
@@ -64,7 +71,7 @@ class AddAuthorizationHeader
 
         'x-image-process',
         'x-image-save-bucket',
-        'x-image-save-object'
+        'x-image-save-object',
     ];
 
     private Signature $signature;
@@ -107,7 +114,6 @@ class AddAuthorizationHeader
 
         $signature = $this->signature->create($method, $contentMd5, $contentType, $date, $canonicalizedHeaders, $canonicalizedResource);
         $request = $request->withHeader('Date', $date);
-        $request = $request->withHeader('Authorization', "OBS {$this->accessKey}:{$signature}");
-        return $request;
+        return $request->withHeader('Authorization', "OBS {$this->accessKey}:{$signature}");
     }
 }

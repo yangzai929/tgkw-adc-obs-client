@@ -1,6 +1,14 @@
 <?php
 
-namespace Kalax2\Obs\Middleware;
+declare(strict_types=1);
+/**
+ * This file is part of tgkw-adc.
+ *
+ * @link     https://www.tgkw.com
+ * @document https://hyperf.wiki
+ */
+
+namespace TgkwAdc\Obs\Middleware;
 
 use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Message\RequestInterface;

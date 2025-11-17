@@ -1,14 +1,21 @@
 <?php
 
-namespace Kalax2\Obs;
+declare(strict_types=1);
+/**
+ * This file is part of tgkw-adc.
+ *
+ * @link     https://www.tgkw.com
+ * @document https://hyperf.wiki
+ */
+
+namespace TgkwAdc\Obs;
 
 use ArrayAccess;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
-
-use Kalax2\Obs\Parser\ErrorParser;
-use Kalax2\Obs\Parser\ObsParser;
-use Kalax2\Obs\Parser\ObsParserInterface;
+use TgkwAdc\Obs\Parser\ErrorParser;
+use TgkwAdc\Obs\Parser\ObsParser;
+use TgkwAdc\Obs\Parser\ObsParserInterface;
 
 class ObsResponse extends Response implements ArrayAccess
 {
@@ -25,15 +32,6 @@ class ObsResponse extends Response implements ArrayAccess
         );
 
         $this->parse($parser);
-    }
-
-    private function parse(?ObsParserInterface $parser): void
-    {
-        if (is_null($parser)) {
-            $parser = $this->getStatusCode() === 200 ? new ObsParser() : new ErrorParser();
-        }
-
-        $this->result = $parser($this);
     }
 
     public function getResult(): array
@@ -57,5 +55,14 @@ class ObsResponse extends Response implements ArrayAccess
 
     public function offsetUnset(mixed $offset): void
     {
+    }
+
+    private function parse(?ObsParserInterface $parser): void
+    {
+        if (is_null($parser)) {
+            $parser = $this->getStatusCode() === 200 ? new ObsParser() : new ErrorParser();
+        }
+
+        $this->result = $parser($this);
     }
 }

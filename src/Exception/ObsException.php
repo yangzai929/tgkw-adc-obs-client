@@ -1,16 +1,25 @@
 <?php
 
-namespace Kalax2\Obs\Exception;
+declare(strict_types=1);
+/**
+ * This file is part of tgkw-adc.
+ *
+ * @link     https://www.tgkw.com
+ * @document https://hyperf.wiki
+ */
 
+namespace TgkwAdc\Obs\Exception;
+
+use Exception;
 use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Client\RequestExceptionInterface;
 use Psr\Http\Message\RequestInterface;
+use TgkwAdc\Obs\ObsResponse;
 
-use Kalax2\Obs\ObsResponse;
-
-class ObsException extends \Exception implements RequestExceptionInterface
+class ObsException extends Exception implements RequestExceptionInterface
 {
     private ObsResponse $response;
+
     private RequestInterface $request;
 
     public function __construct(RequestException $exception)

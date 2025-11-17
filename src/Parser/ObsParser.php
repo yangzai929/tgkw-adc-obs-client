@@ -1,10 +1,17 @@
 <?php
 
-namespace Kalax2\Obs\Parser;
+declare(strict_types=1);
+/**
+ * This file is part of tgkw-adc.
+ *
+ * @link     https://www.tgkw.com
+ * @document https://hyperf.wiki
+ */
+
+namespace TgkwAdc\Obs\Parser;
 
 use Psr\Http\Message\ResponseInterface;
-
-use Kalax2\Obs\Utils;
+use TgkwAdc\Obs\Utils;
 
 class ObsParser implements ObsParserInterface
 {
@@ -19,7 +26,7 @@ class ObsParser implements ObsParserInterface
         $response->getBody()->rewind();
         $result = [];
 
-        if (!empty($contents)) {
+        if (! empty($contents)) {
             if (str_starts_with($contents, '<?xml')) {
                 $result = Utils::xmlToArray($contents, $this->xmlArrayNodes);
             } else {

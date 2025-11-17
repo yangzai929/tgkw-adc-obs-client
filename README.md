@@ -12,12 +12,12 @@
 ## 使用方法
 安装
 ```shell
-composer require kalax2/huaweicloud-obs-client
+composer require tgkw-adc/huaweicloud-obs-client
 ```
 示例
 ```php
-use Kalax2\Obs\ObsClient;
-use Kalax2\Obs\Exception\ObsException;
+use TgkwAdc\Obs\ObsClient;
+use TgkwAdc\Obs\Exception\ObsException;
 
 $obsClient = new ObsClient(
     // Access Key

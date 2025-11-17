@@ -1,30 +1,31 @@
 <?php
 
-namespace Kalax2\Obs\Trait;
+declare(strict_types=1);
+/**
+ * This file is part of tgkw-adc.
+ *
+ * @link     https://www.tgkw.com
+ * @document https://hyperf.wiki
+ */
+
+namespace TgkwAdc\Obs\Trait;
 
 use GuzzleHttp\Exception\GuzzleException;
-
-use Kalax2\Obs\Exception\ObsException;
-use Kalax2\Obs\ObsResponse;
-use Kalax2\Obs\Parser\FileParser;
-use Kalax2\Obs\Parser\ObsParser;
-use Kalax2\Obs\Parser\ObsParserInterface;
-use Kalax2\Obs\Utils;
 use Psr\Http\Message\StreamInterface;
+use TgkwAdc\Obs\Exception\ObsException;
+use TgkwAdc\Obs\ObsResponse;
+use TgkwAdc\Obs\Parser\FileParser;
+use TgkwAdc\Obs\Parser\ObsParser;
+use TgkwAdc\Obs\Parser\ObsParserInterface;
+use TgkwAdc\Obs\Utils;
 
 trait ObjectTrait
 {
-    abstract protected function request(string $method, string $uri, array $headers = [], mixed $body = null, ?ObsParserInterface $parser = null): ObsResponse;
-    abstract protected function createUri(?string $bucket = null, ?string $region = null, string $object = '', string $query = ''): string;
-
     /**
-     * PUT上传
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0080.html
-     * @param string $object
-     * @param string|StreamInterface|resource $body
-     * @param array $headers
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * PUT上传.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0080.html
+     * @param resource|StreamInterface|string $body
+     * @throws GuzzleException|ObsException
      */
     public function putObject(string $object, mixed $body, array $headers = []): ObsResponse
     {
@@ -35,7 +36,7 @@ trait ObjectTrait
             'x-obs-server-side-encryption-kms-key-id' => 'ServerSideEncryptionKmsKeyId',
             'x-obs-server-side-encryption-customer-algorithm' => 'ServerSideEncryptionCustomerAlgorithm',
             'x-obs-server-side-encryption-customer-key-MD5' => 'ServerSideEncryptionCustomerKeyMD5',
-            'x-obs-storage-class' => 'StorageClass'
+            'x-obs-storage-class' => 'StorageClass',
         ];
 
         $parser = new ObsParser($responseHeadersMap);
@@ -51,11 +52,8 @@ trait ObjectTrait
 
     /**
      * 复制对象
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0082.html
-     * @param string $object
-     * @param array $headers
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0082.html
+     * @throws GuzzleException|ObsException
      */
     public function copyObject(string $object, array $headers): ObsResponse
     {
@@ -66,7 +64,7 @@ trait ObjectTrait
             'x-obs-server-side-encryption-kms-key-id' => 'ServerSideEncryptionKmsKeyId',
             'x-obs-server-side-encryption-customer-algorithm' => 'ServerSideEncryptionCustomerAlgorithm',
             'x-obs-server-side-encryption-customer-key-MD5' => 'ServerSideEncryptionCustomerKeyMD5',
-            'x-obs-storage-class' => 'StorageClass'
+            'x-obs-storage-class' => 'StorageClass',
         ];
 
         $parser = new ObsParser($responseHeadersMap);
@@ -81,12 +79,8 @@ trait ObjectTrait
 
     /**
      * 获取对象
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0083.html
-     * @param string $object
-     * @param array $query
-     * @param array $headers
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0083.html
+     * @throws GuzzleException|ObsException
      */
     public function getObject(string $object, array $query = [], array $headers = []): ObsResponse
     {
@@ -105,7 +99,7 @@ trait ObjectTrait
             'x-obs-object-type' => 'ObjectType',
             'x-obs-next-append-position' => 'NextAppendPosition',
             'x-obs-tagging-count' => 'TaggingCount',
-            'ETag' => 'ETag'
+            'ETag' => 'ETag',
         ];
 
         $parser = new FileParser($responseHeadersMap);
@@ -119,13 +113,9 @@ trait ObjectTrait
     }
 
     /**
-     * 获取对象元数据
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0084.html
-     * @param string $object
-     * @param array $query
-     * @param array $headers
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 获取对象元数据.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0084.html
+     * @throws GuzzleException|ObsException
      */
     public function headObject(string $object, array $query = [], array $headers = []): ObsResponse
     {
@@ -152,7 +142,7 @@ trait ObjectTrait
             'x-obs-uploadId' => 'UploadId',
             'x-obs-tagging-count' => 'TaggingCount',
             'x-obs-object-lock-mode' => 'ObjectLockMode',
-            'x-obs-object-lock-retain-until-date' => 'ObjectLockRetainUntilDate'
+            'x-obs-object-lock-retain-until-date' => 'ObjectLockRetainUntilDate',
         ];
 
         $parser = new ObsParser($responseHeadersMap);
@@ -167,11 +157,8 @@ trait ObjectTrait
 
     /**
      * 删除对象
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0085.html
-     * @param string $object
-     * @param array $query
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0085.html
+     * @throws GuzzleException|ObsException
      */
     public function deleteObject(string $object, array $query = []): ObsResponse
     {
@@ -179,7 +166,7 @@ trait ObjectTrait
 
         $responseHeadersMap = [
             'x-obs-delete-marker' => 'DeleteMarker',
-            'x-obs-version-id' => 'VersionId'
+            'x-obs-version-id' => 'VersionId',
         ];
 
         $parser = new ObsParser($responseHeadersMap);
@@ -193,10 +180,8 @@ trait ObjectTrait
 
     /**
      * 批量删除对象
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0086.html
-     * @param array|string $objects
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0086.html
+     * @throws GuzzleException|ObsException
      */
     public function deleteObjects(array|string $objects): ObsResponse
     {
@@ -215,12 +200,8 @@ trait ObjectTrait
 
     /**
      * 恢复归档或深度归档存储对象
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0087.html
-     * @param string $object
-     * @param array|string $restore
-     * @param array $query
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0087.html
+     * @throws GuzzleException|ObsException
      */
     public function restoreObject(string $object, array|string $restore, array $query = []): ObsResponse
     {
@@ -239,13 +220,9 @@ trait ObjectTrait
 
     /**
      * 追加写对象
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0088.html
-     * @param string $object
-     * @param string|StreamInterface|resource $body
-     * @param array $query
-     * @param array $headers
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0088.html
+     * @param resource|StreamInterface|string $body
+     * @throws GuzzleException|ObsException
      */
     public function appendObject(string $object, mixed $body, array $query = [], array $headers = []): ObsResponse
     {
@@ -259,7 +236,7 @@ trait ObjectTrait
             'x-obs-server-side-encryption-kms-key-id' => 'ServerSideEncryptionKmsKeyId',
             'x-obs-server-side-encryption-customer-algorithm' => 'ServerSideEncryptionCustomerAlgorithm',
             'x-obs-server-side-encryption-customer-key-MD5' => 'ServerSideEncryptionCustomerKeyMD5',
-            'x-obs-next-append-position' => 'NextAppendPosition'
+            'x-obs-next-append-position' => 'NextAppendPosition',
         ];
 
         $parser = new ObsParser($responseHeadersMap);
@@ -274,13 +251,9 @@ trait ObjectTrait
     }
 
     /**
-     * 设置对象ACL
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0089.html
-     * @param string $object
-     * @param array|string $acl
-     * @param array $query
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 设置对象ACL.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0089.html
+     * @throws GuzzleException|ObsException
      */
     public function setObjectAcl(string $object, array|string $acl, array $query = []): ObsResponse
     {
@@ -290,7 +263,7 @@ trait ObjectTrait
         $headers = ['Content-Type' => 'application/xml'];
 
         $responseHeadersMap = [
-            'x-obs-version-id' => 'VersionId'
+            'x-obs-version-id' => 'VersionId',
         ];
 
         $parser = new ObsParser($responseHeadersMap);
@@ -305,12 +278,9 @@ trait ObjectTrait
     }
 
     /**
-     * 获取对象ACL
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0090.html
-     * @param string $object
-     * @param array $query
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 获取对象ACL.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0090.html
+     * @throws GuzzleException|ObsException
      */
     public function getObjectAcl(string $object, array $query = []): ObsResponse
     {
@@ -318,7 +288,7 @@ trait ObjectTrait
         $query = 'acl&' . $query;
 
         $responseHeadersMap = [
-            'x-obs-version-id' => 'VersionId'
+            'x-obs-version-id' => 'VersionId',
         ];
 
         $parser = new ObsParser($responseHeadersMap, ['Grant']);
@@ -331,13 +301,9 @@ trait ObjectTrait
     }
 
     /**
-     * 修改对象元数据
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0091.html
-     * @param string $object
-     * @param array $query
-     * @param array $headers
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 修改对象元数据.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0091.html
+     * @throws GuzzleException|ObsException
      */
     public function setObjectMetadata(string $object, array $query = [], array $headers = []): ObsResponse
     {
@@ -353,7 +319,7 @@ trait ObjectTrait
             'Expires' => 'Expires',
             'x-obs-website-redirect-location' => 'WebsiteRedirectLocation',
             'x-obs-storage-class' => 'StorageClass',
-            'x-obs-expires' => 'x-obs-expires'
+            'x-obs-expires' => 'x-obs-expires',
         ];
 
         $parser = new ObsParser($responseHeadersMap);
@@ -368,12 +334,9 @@ trait ObjectTrait
 
     /**
      * 修改写对象
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0092.html
-     * @param string $object
-     * @param StreamInterface|string|resource $body
-     * @param array $query
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0092.html
+     * @param resource|StreamInterface|string $body
+     * @throws GuzzleException|ObsException
      */
     public function modifyObject(string $object, mixed $body, array $query = []): ObsResponse
     {
@@ -389,11 +352,8 @@ trait ObjectTrait
 
     /**
      * 截断对象
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0093.html
-     * @param string $object
-     * @param array $query
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0093.html
+     * @throws GuzzleException|ObsException
      */
     public function truncateObject(string $object, array $query = []): ObsResponse
     {
@@ -408,11 +368,8 @@ trait ObjectTrait
 
     /**
      * 重命名对象
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0094.html
-     * @param string $object
-     * @param array $query
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0094.html
+     * @throws GuzzleException|ObsException
      */
     public function renameObject(string $object, array $query = []): ObsResponse
     {
@@ -426,13 +383,9 @@ trait ObjectTrait
     }
 
     /**
-     * 设置对象标签
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0172.html
-     * @param string $object
-     * @param array|string $tagging
-     * @param array $query
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 设置对象标签.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0172.html
+     * @throws GuzzleException|ObsException
      */
     public function setObjectTagging(string $object, array|string $tagging, array $query = []): ObsResponse
     {
@@ -450,12 +403,9 @@ trait ObjectTrait
     }
 
     /**
-     * 获取对象标签
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0164.html
-     * @param string $object
-     * @param array $query
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 获取对象标签.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0164.html
+     * @throws GuzzleException|ObsException
      */
     public function getObjectTagging(string $object, array $query = []): ObsResponse
     {
@@ -471,12 +421,9 @@ trait ObjectTrait
     }
 
     /**
-     * 删除对象标签
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0165.html
-     * @param string $object
-     * @param array $query
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 删除对象标签.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0165.html
+     * @throws GuzzleException|ObsException
      */
     public function deleteObjectTagging(string $object, array $query = []): ObsResponse
     {
@@ -490,13 +437,9 @@ trait ObjectTrait
     }
 
     /**
-     * 配置对象级WORM保护策略
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0166.html
-     * @param string $object
-     * @param array|string $retention
-     * @param array $query
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 配置对象级WORM保护策略.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0166.html
+     * @throws GuzzleException|ObsException
      */
     public function setObjectRetention(string $object, array|string $retention, array $query = []): ObsResponse
     {
@@ -515,10 +458,8 @@ trait ObjectTrait
 
     /**
      * 列举桶中已初始化多段任务
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0097.html
-     * @param array $query
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0097.html
+     * @throws GuzzleException|ObsException
      */
     public function listMultipartUploads(array $query = []): ObsResponse
     {
@@ -535,12 +476,8 @@ trait ObjectTrait
 
     /**
      * 初始化上传段任务
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0098.html
-     * @param string $object
-     * @param array $query
-     * @param array $headers
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0098.html
+     * @throws GuzzleException|ObsException
      */
     public function initiateMultipartUpload(string $object, array $query = [], array $headers = []): ObsResponse
     {
@@ -551,7 +488,7 @@ trait ObjectTrait
             'x-obs-server-side-encryption' => 'ServerSideEncryption',
             'x-obs-server-side-encryption-kms-key-id' => 'ServerSideEncryptionKmsKeyId',
             'x-obs-server-side-encryption-customer-algorithm' => 'ServerSideEncryptionCustomerAlgorithm',
-            'x-obs-server-side-encryption-customer-key-MD5' =>  'ServerSideEncryptionCustomerKeyMD5'
+            'x-obs-server-side-encryption-customer-key-MD5' => 'ServerSideEncryptionCustomerKeyMD5',
         ];
 
         $parser = new ObsParser($responseHeadersMap);
@@ -565,14 +502,10 @@ trait ObjectTrait
     }
 
     /**
-     * 上传段
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0099.html
-     * @param string $object
-     * @param StreamInterface|string|resource $body
-     * @param array $query
-     * @param array $headers
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 上传段.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0099.html
+     * @param resource|StreamInterface|string $body
+     * @throws GuzzleException|ObsException
      */
     public function uploadPart(string $object, mixed $body, array $query = [], array $headers = []): ObsResponse
     {
@@ -587,13 +520,9 @@ trait ObjectTrait
     }
 
     /**
-     * 拷贝段
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0100.html
-     * @param string $object
-     * @param array $query
-     * @param array $headers
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 拷贝段.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0100.html
+     * @throws GuzzleException|ObsException
      */
     public function copyPart(string $object, array $query = [], array $headers = []): ObsResponse
     {
@@ -603,7 +532,7 @@ trait ObjectTrait
             'x-obs-server-side-encryption' => 'ServerSideEncryption',
             'x-obs-server-side-encryption-kms-key-id' => 'ServerSideEncryptionKmsKeyId',
             'x-obs-server-side-encryption-customer-algorithm' => 'ServerSideEncryptionCustomerAlgorithm',
-            'x-obs-server-side-encryption-customer-key-MD5' =>  'ServerSideEncryptionCustomerKeyMD5'
+            'x-obs-server-side-encryption-customer-key-MD5' => 'ServerSideEncryptionCustomerKeyMD5',
         ];
 
         $parser = new ObsParser($responseHeadersMap);
@@ -617,12 +546,9 @@ trait ObjectTrait
     }
 
     /**
-     * 列举已上传未合并的段
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0101.html
-     * @param string $object
-     * @param array $query
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 列举已上传未合并的段.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0101.html
+     * @throws GuzzleException|ObsException
      */
     public function listParts(string $object, array $query = []): ObsResponse
     {
@@ -637,13 +563,9 @@ trait ObjectTrait
     }
 
     /**
-     * 合并段
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0102.html
-     * @param string $object
-     * @param array|string $completeMultipartUpload
-     * @param array $query
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 合并段.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0102.html
+     * @throws GuzzleException|ObsException
      */
     public function completeMultipartUpload(string $object, array|string $completeMultipartUpload, array $query = []): ObsResponse
     {
@@ -654,7 +576,7 @@ trait ObjectTrait
             'x-obs-version-id' => 'VersionId',
             'x-obs-server-side-encryption' => 'ServerSideEncryption',
             'x-obs-server-side-encryption-kms-key-id' => 'ServerSideEncryptionKmsKeyId',
-            'x-obs-server-side-encryption-customer-algorithm' => 'ServerSideEncryptionCustomerAlgorithm'
+            'x-obs-server-side-encryption-customer-algorithm' => 'ServerSideEncryptionCustomerAlgorithm',
         ];
 
         $parser = new ObsParser($responseHeadersMap);
@@ -669,11 +591,8 @@ trait ObjectTrait
 
     /**
      * 取消多段上传任务
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0103.html
-     * @param string $object
-     * @param array $query
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0103.html
+     * @throws GuzzleException|ObsException
      */
     public function abortMultipartUpload(string $object, array $query = []): ObsResponse
     {
@@ -684,4 +603,8 @@ trait ObjectTrait
             uri: $this->createUri(object: $object, query: $query)
         );
     }
+
+    abstract protected function request(string $method, string $uri, array $headers = [], mixed $body = null, ?ObsParserInterface $parser = null): ObsResponse;
+
+    abstract protected function createUri(?string $bucket = null, ?string $region = null, string $object = '', string $query = ''): string;
 }

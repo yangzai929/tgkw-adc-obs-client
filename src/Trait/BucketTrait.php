@@ -1,28 +1,30 @@
 <?php
 
-namespace Kalax2\Obs\Trait;
+declare(strict_types=1);
+/**
+ * This file is part of tgkw-adc.
+ *
+ * @link     https://www.tgkw.com
+ * @document https://hyperf.wiki
+ */
+
+namespace TgkwAdc\Obs\Trait;
 
 use GuzzleHttp\Exception\GuzzleException;
-
-use Kalax2\Obs\Exception\ObsException;
-use Kalax2\Obs\ObsResponse;
-use Kalax2\Obs\Parser\LocationParser;
-use Kalax2\Obs\Parser\ObsParser;
-use Kalax2\Obs\Parser\ObsParserInterface;
-use Kalax2\Obs\Parser\StorageClassParser;
-use Kalax2\Obs\Utils;
+use TgkwAdc\Obs\Exception\ObsException;
+use TgkwAdc\Obs\ObsResponse;
+use TgkwAdc\Obs\Parser\LocationParser;
+use TgkwAdc\Obs\Parser\ObsParser;
+use TgkwAdc\Obs\Parser\ObsParserInterface;
+use TgkwAdc\Obs\Parser\StorageClassParser;
+use TgkwAdc\Obs\Utils;
 
 trait BucketTrait
 {
-    abstract protected function request(string $method, string $uri, array $headers = [], mixed $body = null, ?ObsParserInterface $parser = null): ObsResponse;
-    abstract protected function createUri(?string $bucket = null, ?string $region = null, string $object = '', string $query = ''): string;
-
     /**
-     * 获取桶列表
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0020.html
-     * @param array $headers
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 获取桶列表.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0020.html
+     * @throws GuzzleException|ObsException
      */
     public function listBuckets(array $headers = []): ObsResponse
     {
@@ -37,13 +39,9 @@ trait BucketTrait
     }
 
     /**
-     * 创建桶
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0021.html
-     * @param string $bucket
-     * @param string $region
-     * @param array $headers
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 创建桶.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0021.html
+     * @throws GuzzleException|ObsException
      */
     public function createBucket(string $bucket, string $region, array $headers = []): ObsResponse
     {
@@ -59,12 +57,9 @@ trait BucketTrait
     }
 
     /**
-     * 获取桶列表
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0022.html
-     * @param array $query
-     * @param bool $isVersionsQuery
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 获取桶列表.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0022.html
+     * @throws GuzzleException|ObsException
      */
     public function listObjects(array $query = [], bool $isVersionsQuery = false): ObsResponse
     {
@@ -81,10 +76,8 @@ trait BucketTrait
 
     /**
      * 列举桶内多版本对象
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0022.html
-     * @param array $query
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0022.html
+     * @throws GuzzleException|ObsException
      */
     public function listVersions(array $query = []): ObsResponse
     {
@@ -92,11 +85,9 @@ trait BucketTrait
     }
 
     /**
-     * 获取桶元数据
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0023.html
-     * @param array $headers
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 获取桶元数据.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0023.html
+     * @throws GuzzleException|ObsException
      */
     public function getBucketMetadata(array $headers = []): ObsResponse
     {
@@ -111,7 +102,7 @@ trait BucketTrait
             'Access-Control-Allow-Headers' => 'AccessControlAllowHeaders',
             'Access-Control-Max-Age' => 'AccessControlMaxAge',
             'Access-Control-Allow-Methods' => 'AccessControlAllowMethods',
-            'Access-Control-Expose-Headers' => 'AccessControlExposeHeaders'
+            'Access-Control-Expose-Headers' => 'AccessControlExposeHeaders',
         ];
 
         $parser = new ObsParser($responseHeadersMap);
@@ -125,10 +116,9 @@ trait BucketTrait
     }
 
     /**
-     * 获取桶元数据
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0023.html
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 获取桶元数据.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0023.html
+     * @throws GuzzleException|ObsException
      */
     public function headBucket(): ObsResponse
     {
@@ -136,10 +126,9 @@ trait BucketTrait
     }
 
     /**
-     * 获取桶位置
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0024.html
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 获取桶位置.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0024.html
+     * @throws GuzzleException|ObsException
      */
     public function getBucketLocation(): ObsResponse
     {
@@ -153,10 +142,9 @@ trait BucketTrait
     }
 
     /**
-     * 删除桶
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0025.html
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 删除桶.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0025.html
+     * @throws GuzzleException|ObsException
      */
     public function deleteBucket(): ObsResponse
     {
@@ -167,11 +155,9 @@ trait BucketTrait
     }
 
     /**
-     * 设置桶策略
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0027.html
-     * @param array|string $policy
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 设置桶策略.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0027.html
+     * @throws GuzzleException|ObsException
      */
     public function setBucketPolicy(array|string $policy): ObsResponse
     {
@@ -187,10 +173,9 @@ trait BucketTrait
     }
 
     /**
-     * 获取桶策略
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0028.html
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 获取桶策略.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0028.html
+     * @throws GuzzleException|ObsException
      */
     public function getBucketPolicy(): ObsResponse
     {
@@ -201,10 +186,9 @@ trait BucketTrait
     }
 
     /**
-     * 删除桶策略
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0029.html
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 删除桶策略.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0029.html
+     * @throws GuzzleException|ObsException
      */
     public function deleteBucketPolicy(): ObsResponse
     {
@@ -215,12 +199,9 @@ trait BucketTrait
     }
 
     /**
-     * 设置桶ACL
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0030.html
-     * @param array|string $acl
-     * @param array $headers
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 设置桶ACL.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0030.html
+     * @throws GuzzleException|ObsException
      */
     public function setBucketAcl(array|string $acl, array $headers = []): ObsResponse
     {
@@ -236,10 +217,9 @@ trait BucketTrait
     }
 
     /**
-     * 获取桶ACL
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0031.html
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 获取桶ACL.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0031.html
+     * @throws GuzzleException|ObsException
      */
     public function getBucketAcl(): ObsResponse
     {
@@ -253,11 +233,9 @@ trait BucketTrait
     }
 
     /**
-     * 设置桶日志管理配置
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0032.html
-     * @param array|string $logging
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 设置桶日志管理配置.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0032.html
+     * @throws GuzzleException|ObsException
      */
     public function setBucketLogging(array|string $logging): ObsResponse
     {
@@ -273,10 +251,9 @@ trait BucketTrait
     }
 
     /**
-     * 获取桶日志管理配置
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0033.html
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 获取桶日志管理配置.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0033.html
+     * @throws GuzzleException|ObsException
      */
     public function getBucketLogging(): ObsResponse
     {
@@ -290,11 +267,9 @@ trait BucketTrait
     }
 
     /**
-     * 设置桶的生命周期配置
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0034.html
-     * @param array|string $lifecycle
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 设置桶的生命周期配置.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0034.html
+     * @throws GuzzleException|ObsException
      */
     public function setBucketLifecycle(array|string $lifecycle): ObsResponse
     {
@@ -310,10 +285,9 @@ trait BucketTrait
     }
 
     /**
-     * 获取桶的生命周期配置
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0035.html
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 获取桶的生命周期配置.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0035.html
+     * @throws GuzzleException|ObsException
      */
     public function getBucketLifecycle(): ObsResponse
     {
@@ -327,10 +301,9 @@ trait BucketTrait
     }
 
     /**
-     * 删除桶的生命周期配置
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0036.html
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 删除桶的生命周期配置.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0036.html
+     * @throws GuzzleException|ObsException
      */
     public function deleteBucketLifecycle(): ObsResponse
     {
@@ -342,10 +315,8 @@ trait BucketTrait
 
     /**
      * 设置桶的多版本状态
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0037.html
-     * @param array|string $versioning
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0037.html
+     * @throws GuzzleException|ObsException
      */
     public function setBucketVersioning(array|string $versioning): ObsResponse
     {
@@ -362,9 +333,8 @@ trait BucketTrait
 
     /**
      * 获取桶的多版本状态
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0038.html
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0038.html
+     * @throws GuzzleException|ObsException
      */
     public function getBucketVersioning(): ObsResponse
     {
@@ -375,11 +345,9 @@ trait BucketTrait
     }
 
     /**
-     * 设置桶默认存储类型
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0044.html
-     * @param array|string $storageClass
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 设置桶默认存储类型.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0044.html
+     * @throws GuzzleException|ObsException
      */
     public function setBucketStorageClass(array|string $storageClass): ObsResponse
     {
@@ -395,10 +363,9 @@ trait BucketTrait
     }
 
     /**
-     * 获取桶默认存储类型
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0045.html
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 获取桶默认存储类型.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0045.html
+     * @throws GuzzleException|ObsException
      */
     public function getBucketStorageClass(): ObsResponse
     {
@@ -412,11 +379,9 @@ trait BucketTrait
     }
 
     /**
-     * 设置桶的跨区域复制配置
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0046.html
-     * @param array|string $replication
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 设置桶的跨区域复制配置.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0046.html
+     * @throws GuzzleException|ObsException
      */
     public function setBucketReplication(array|string $replication): ObsResponse
     {
@@ -432,10 +397,9 @@ trait BucketTrait
     }
 
     /**
-     * 获取桶的跨区域复制配置
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0047.html
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 获取桶的跨区域复制配置.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0047.html
+     * @throws GuzzleException|ObsException
      */
     public function getBucketReplication(): ObsResponse
     {
@@ -449,10 +413,9 @@ trait BucketTrait
     }
 
     /**
-     * 删除桶的跨区域复制配置
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0048.html
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 删除桶的跨区域复制配置.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0048.html
+     * @throws GuzzleException|ObsException
      */
     public function deleteBucketReplication(): ObsResponse
     {
@@ -463,11 +426,9 @@ trait BucketTrait
     }
 
     /**
-     * 设置桶标签
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0049.html
-     * @param array|string $tagging
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 设置桶标签.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0049.html
+     * @throws GuzzleException|ObsException
      */
     public function setBucketTagging(array|string $tagging): ObsResponse
     {
@@ -483,10 +444,9 @@ trait BucketTrait
     }
 
     /**
-     * 获取桶标签
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0050.html
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 获取桶标签.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0050.html
+     * @throws GuzzleException|ObsException
      */
     public function getBucketTagging(): ObsResponse
     {
@@ -500,10 +460,9 @@ trait BucketTrait
     }
 
     /**
-     * 删除桶标签
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0051.html
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 删除桶标签.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0051.html
+     * @throws GuzzleException|ObsException
      */
     public function deleteBucketTagging(): ObsResponse
     {
@@ -514,11 +473,9 @@ trait BucketTrait
     }
 
     /**
-     * 设置桶配额
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0052.html
-     * @param array|string $quota
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 设置桶配额.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0052.html
+     * @throws GuzzleException|ObsException
      */
     public function setBucketQuota(array|string $quota): ObsResponse
     {
@@ -534,10 +491,9 @@ trait BucketTrait
     }
 
     /**
-     * 获取桶配额
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0053.html
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 获取桶配额.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0053.html
+     * @throws GuzzleException|ObsException
      */
     public function getBucketQuota(): ObsResponse
     {
@@ -548,10 +504,9 @@ trait BucketTrait
     }
 
     /**
-     * 获取桶存量信息
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0054.html
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 获取桶存量信息.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0054.html
+     * @throws GuzzleException|ObsException
      */
     public function getBucketStorageInfo(): ObsResponse
     {
@@ -562,12 +517,9 @@ trait BucketTrait
     }
 
     /**
-     * 设置桶清单
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0055.html
-     * @param array|string $inventory
-     * @param array $query
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 设置桶清单.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0055.html
+     * @throws GuzzleException|ObsException
      */
     public function setBucketInventory(array|string $inventory, array $query): ObsResponse
     {
@@ -585,11 +537,9 @@ trait BucketTrait
     }
 
     /**
-     * 获取桶清单
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0056.html
-     * @param array $query
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 获取桶清单.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0056.html
+     * @throws GuzzleException|ObsException
      */
     public function getBucketInventory(array $query): ObsResponse
     {
@@ -606,10 +556,9 @@ trait BucketTrait
     }
 
     /**
-     * 列举桶清单
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0057.html
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 列举桶清单.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0057.html
+     * @throws GuzzleException|ObsException
      */
     public function listBucketInventory(): ObsResponse
     {
@@ -617,11 +566,9 @@ trait BucketTrait
     }
 
     /**
-     * 删除桶清单
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0058.html
-     * @param array $query
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 删除桶清单.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0058.html
+     * @throws GuzzleException|ObsException
      */
     public function deleteBucketInventory(array $query): ObsResponse
     {
@@ -635,11 +582,9 @@ trait BucketTrait
     }
 
     /**
-     * 设置桶的自定义域名
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0059.html
-     * @param array $query
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 设置桶的自定义域名.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0059.html
+     * @throws GuzzleException|ObsException
      */
     public function setBucketCustomDomain(array $query): ObsResponse
     {
@@ -652,10 +597,9 @@ trait BucketTrait
     }
 
     /**
-     * 获取桶的自定义域名
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0060.html
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 获取桶的自定义域名.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0060.html
+     * @throws GuzzleException|ObsException
      */
     public function getBucketCustomDomain(): ObsResponse
     {
@@ -669,11 +613,9 @@ trait BucketTrait
     }
 
     /**
-     * 删除桶的自定义域名
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0061.html
-     * @param array $query
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 删除桶的自定义域名.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0061.html
+     * @throws GuzzleException|ObsException
      */
     public function deleteBucketCustomDomain(array $query): ObsResponse
     {
@@ -686,11 +628,9 @@ trait BucketTrait
     }
 
     /**
-     * 设置桶的加密配置
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0062.html
-     * @param array|string $encryption
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 设置桶的加密配置.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0062.html
+     * @throws GuzzleException|ObsException
      */
     public function setBucketEncryption(array|string $encryption): ObsResponse
     {
@@ -706,10 +646,9 @@ trait BucketTrait
     }
 
     /**
-     * 获取桶的加密配置
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0063.html
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 获取桶的加密配置.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0063.html
+     * @throws GuzzleException|ObsException
      */
     public function getBucketEncryption(): ObsResponse
     {
@@ -720,10 +659,9 @@ trait BucketTrait
     }
 
     /**
-     * 删除桶的加密配置
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0064.html
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 删除桶的加密配置.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0064.html
+     * @throws GuzzleException|ObsException
      */
     public function deleteBucketEncryption(): ObsResponse
     {
@@ -734,11 +672,9 @@ trait BucketTrait
     }
 
     /**
-     * 设置桶归档对象直读策略
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0065.html
-     * @param array|string $directColdAccess
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 设置桶归档对象直读策略.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0065.html
+     * @throws GuzzleException|ObsException
      */
     public function setBucketDirectColdAccess(array|string $directColdAccess): ObsResponse
     {
@@ -754,10 +690,9 @@ trait BucketTrait
     }
 
     /**
-     * 获取桶归档对象直读策略
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0066.html
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 获取桶归档对象直读策略.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0066.html
+     * @throws GuzzleException|ObsException
      */
     public function getBucketDirectColdAccess(): ObsResponse
     {
@@ -768,10 +703,9 @@ trait BucketTrait
     }
 
     /**
-     * 删除桶归档对象直读策略
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0067.html
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 删除桶归档对象直读策略.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0067.html
+     * @throws GuzzleException|ObsException
      */
     public function deleteBucketDirectColdAccess(): ObsResponse
     {
@@ -782,11 +716,9 @@ trait BucketTrait
     }
 
     /**
-     * 设置镜像回源规则
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0119.html
-     * @param array|string $mirrorBackToSource
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 设置镜像回源规则.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0119.html
+     * @throws GuzzleException|ObsException
      */
     public function setBucketMirrorBackToSource(array|string $mirrorBackToSource): ObsResponse
     {
@@ -802,10 +734,9 @@ trait BucketTrait
     }
 
     /**
-     * 获取镜像回源规则
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0120.html
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 获取镜像回源规则.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0120.html
+     * @throws GuzzleException|ObsException
      */
     public function getBucketMirrorBackToSource(): ObsResponse
     {
@@ -816,10 +747,9 @@ trait BucketTrait
     }
 
     /**
-     * 删除镜像回源规则
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0121.html
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 删除镜像回源规则.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0121.html
+     * @throws GuzzleException|ObsException
      */
     public function deleteBucketMirrorBackToSource(): ObsResponse
     {
@@ -830,11 +760,9 @@ trait BucketTrait
     }
 
     /**
-     * 设置DIS通知策略
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0139.html
-     * @param array|string $disPolicy
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 设置DIS通知策略.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0139.html
+     * @throws GuzzleException|ObsException
      */
     public function setBucketDisPolicy(array|string $disPolicy): ObsResponse
     {
@@ -850,10 +778,9 @@ trait BucketTrait
     }
 
     /**
-     * 获取DIS通知策略
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0140.html
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 获取DIS通知策略.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0140.html
+     * @throws GuzzleException|ObsException
      */
     public function getBucketDisPolicy(): ObsResponse
     {
@@ -864,10 +791,9 @@ trait BucketTrait
     }
 
     /**
-     * 删除DIS通知策略
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0141.html
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 删除DIS通知策略.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0141.html
+     * @throws GuzzleException|ObsException
      */
     public function deleteBucketDisPolicy(): ObsResponse
     {
@@ -878,11 +804,9 @@ trait BucketTrait
     }
 
     /**
-     * 设置在线解压策略
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0148.html
-     * @param array|string $obsCompressPolicy
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 设置在线解压策略.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0148.html
+     * @throws GuzzleException|ObsException
      */
     public function setBucketObsCompressPolicy(array|string $obsCompressPolicy): ObsResponse
     {
@@ -898,10 +822,9 @@ trait BucketTrait
     }
 
     /**
-     * 获取在线解压策略
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0149.html
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 获取在线解压策略.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0149.html
+     * @throws GuzzleException|ObsException
      */
     public function getBucketObsCompressPolicy(): ObsResponse
     {
@@ -912,10 +835,9 @@ trait BucketTrait
     }
 
     /**
-     * 删除在线解压策略
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0150.html
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 删除在线解压策略.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0150.html
+     * @throws GuzzleException|ObsException
      */
     public function deleteBucketObsCompressPolicy(): ObsResponse
     {
@@ -926,11 +848,9 @@ trait BucketTrait
     }
 
     /**
-     * 配置桶级默认WORM策略
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0167.html
-     * @param array|string $objectLock
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 配置桶级默认WORM策略.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0167.html
+     * @throws GuzzleException|ObsException
      */
     public function setBucketObjectLock(array|string $objectLock): ObsResponse
     {
@@ -946,10 +866,9 @@ trait BucketTrait
     }
 
     /**
-     * 获取桶级默认WORM策略
-     * @link https://support.huaweicloud.com/api-obs/obs_04_0168.html
-     * @return ObsResponse
-     * @throws ObsException|GuzzleException
+     * 获取桶级默认WORM策略.
+     * @see https://support.huaweicloud.com/api-obs/obs_04_0168.html
+     * @throws GuzzleException|ObsException
      */
     public function getBucketObjectLock(): ObsResponse
     {
@@ -958,4 +877,8 @@ trait BucketTrait
             uri: $this->createUri(query: 'object-lock')
         );
     }
+
+    abstract protected function request(string $method, string $uri, array $headers = [], mixed $body = null, ?ObsParserInterface $parser = null): ObsResponse;
+
+    abstract protected function createUri(?string $bucket = null, ?string $region = null, string $object = '', string $query = ''): string;
 }

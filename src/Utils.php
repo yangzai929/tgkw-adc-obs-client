@@ -1,6 +1,14 @@
 <?php
 
-namespace Kalax2\Obs;
+declare(strict_types=1);
+/**
+ * This file is part of tgkw-adc.
+ *
+ * @link     https://www.tgkw.com
+ * @document https://hyperf.wiki
+ */
+
+namespace TgkwAdc\Obs;
 
 use SimpleXMLElement;
 use Spatie\ArrayToXml\ArrayToXml;
@@ -23,7 +31,7 @@ class Utils
                 $tagName = $element->getName();
 
                 if (in_array($tagName, $forceArray) || count($xml->{$tagName}) > 1) {
-                    if (!isset($array[$tagName])) {
+                    if (! isset($array[$tagName])) {
                         $array[$tagName] = [];
                     }
                     $array[$tagName][] = $fn($element, $forceArray);
@@ -33,7 +41,7 @@ class Utils
             }
 
             if (empty($array)) {
-                return trim((string)$xml);
+                return trim((string) $xml);
             }
 
             return $array;
@@ -42,11 +50,12 @@ class Utils
         return $fn($xml, $forceArray);
     }
 
-    public static function createUri(string $bucket = '',
-                                     string $region = '',
-                                     string $object = '',
-                                     string $query = ''): string
-    {
+    public static function createUri(
+        string $bucket = '',
+        string $region = '',
+        string $object = '',
+        string $query = ''
+    ): string {
         $uri = 'https://';
         $uri .= $bucket ? $bucket . '.' : '';
         $uri .= 'obs.' . ($region ? $region . '.' : '') . 'myhuaweicloud.com/';

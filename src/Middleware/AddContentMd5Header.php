@@ -1,9 +1,17 @@
 <?php
 
-namespace Kalax2\Obs\Middleware;
+declare(strict_types=1);
+/**
+ * This file is part of tgkw-adc.
+ *
+ * @link     https://www.tgkw.com
+ * @document https://hyperf.wiki
+ */
 
-use Psr\Http\Message\RequestInterface;
+namespace TgkwAdc\Obs\Middleware;
+
 use GuzzleHttp\Psr7\Utils;
+use Psr\Http\Message\RequestInterface;
 
 class AddContentMd5Header
 {
